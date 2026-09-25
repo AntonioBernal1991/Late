@@ -1,0 +1,49 @@
+# Carpetas que Unity regenera
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# Archivos de IDE y soluciones generadas
+.vs/
+.vscode/
+.idea/
+.gradle/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Compilaciones y paquetes
+*.apk
+*.aab
+*.unitypackage
+*.app
+crashlytics-build.properties
+
+# Sistema
+sysinfo.txt
+.DS_Store
+Thumbs.db
+
+# Secretos y configuración local (nunca subir)
+*.env
+.env*
+appsettings.Development.json
