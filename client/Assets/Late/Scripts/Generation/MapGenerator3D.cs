@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Late.Core;
 using UnityEngine;
@@ -10,16 +9,13 @@ namespace Late.Generation
     /// Punto de entrada del generador procedural. Al empezar la escena genera el laberinto descrito
     /// por un <see cref="MapSettings"/> bajo un hijo "MazeRoot".
     ///
-    /// Flujo para crear un nivel: generar en Play Mode, exportar el mapa a prefab desde el inspector,
+    /// Flujo para crear un nivel: generar en Play Mode, hornearlo a prefab con Late > Generador > Hornear,
     /// pulirlo a mano y optimizarlo. Los niveles del juego usan ese prefab, no generan en tiempo real.
     /// </summary>
     [DisallowMultipleComponent]
     public class MapGenerator3D : MonoBehaviour, IMapGenerator
     {
         public const string MazeRootName = "MazeRoot";
-
-        /// <summary>Se lanza al terminar de generar. El editor lo usa para exportar automáticamente.</summary>
-        public static event Action<MapGenerator3D> GenerationCompleted;
 
         [SerializeField] private MapSettings _settings;
 
@@ -29,24 +25,6 @@ namespace Late.Generation
         [Tooltip("Si está activo, genera todo de golpe, sin pausas entre pasos ni entre módulos.")]
         [SerializeField] private bool _generateInstantly = false;
 
-        [Header("Exportar módulos a prefabs (editor)")]
-        [Tooltip("Carpeta dentro de Assets/ donde se guardan los prefabs de módulos.")]
-        [SerializeField] private string _modulePrefabExportFolder = "Assets/Late/Levels/Modules";
-        [Tooltip("Quita los hijos desactivados antes de guardar (prefabs más pequeños).")]
-        [SerializeField] private bool _exportStripInactiveChildren = true;
-        [Tooltip("Exporta los módulos automáticamente al terminar la generación.")]
-        [SerializeField] private bool _autoExportModulePrefabsAfterGeneration = false;
-
-        [Header("Exportar el mapa completo a prefab (editor)")]
-        [Tooltip("Carpeta dentro de Assets/ donde se guarda el prefab del mapa.")]
-        [SerializeField] private string _mapPrefabExportFolder = "Assets/Late/Levels/Maps";
-        [Tooltip("Exporta el mapa automáticamente al terminar la generación.")]
-        [SerializeField] private bool _autoExportMapPrefabAfterGeneration = false;
-        [Tooltip("Quita las mallas combinadas para que el mapa se pueda editar cubo a cubo.")]
-        [SerializeField] private bool _mapExportRemoveCombinedMeshes = true;
-        [Tooltip("Activa el MeshRenderer de todos los cubos (el suelo invisible sigue invisible).")]
-        [SerializeField] private bool _mapExportEnableAllCubeRenderers = true;
-
         private Transform _mazeRoot;
         private ModuleQueue _queue;
         private ModuleGenerator _moduleGenerator;
@@ -55,14 +33,6 @@ namespace Late.Generation
         public GenerationPacer Pacer { get; private set; }
         public Transform MazeRoot => _mazeRoot;
         public bool IsGenerationComplete { get; private set; }
-
-        public string ModulePrefabExportFolder => _modulePrefabExportFolder;
-        public bool ExportStripInactiveChildren => _exportStripInactiveChildren;
-        public bool AutoExportModulePrefabsAfterGeneration => _autoExportModulePrefabsAfterGeneration;
-        public string MapPrefabExportFolder => _mapPrefabExportFolder;
-        public bool AutoExportMapPrefabAfterGeneration => _autoExportMapPrefabAfterGeneration;
-        public bool MapExportRemoveCombinedMeshes => _mapExportRemoveCombinedMeshes;
-        public bool MapExportEnableAllCubeRenderers => _mapExportEnableAllCubeRenderers;
 
         private void Awake()
         {
@@ -119,7 +89,6 @@ namespace Late.Generation
         {
             yield return _moduleGenerator.Generate(_settings.ModuleCount);
             IsGenerationComplete = true;
-            GenerationCompleted?.Invoke(this);
         }
 
         private static void PlaceMainCameraAt(Vector3 position)
