@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d585689764a2e8d45984c89b00b7867b, type: 3}
+  m_Name: MapSettings_Default
+  m_EditorClassIdentifier: 
+  _moduleWidth: 13
+  _moduleHeight: 13
+  _tileSpacing: 1.2
+  _moduleSpacing: 0
+  _seed: 45
+  _moduleCount: 34
+  _branchingStartsAtModule: 1
+  _cavesEnabled: 1
+  _caveSize: 3.03
+  _cubePrefab: {fileID: 2170776422275495230, guid: 0d16a136a9b5685408356427faf51116, type: 3}
+  _grassMaterial: {fileID: 2100000, guid: fadd5e388142f4f4ca3c8db1aac5ea77, type: 2}
+  _groundMaterial: {fileID: 2100000, guid: 3a8b51543e5eb644ab8952171af3b08b, type: 2}
+  _groundPhysicMaterial: {fileID: 0}

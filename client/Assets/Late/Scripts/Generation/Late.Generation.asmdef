@@ -1,0 +1,16 @@
+{
+    "name": "Late.Generation",
+    "rootNamespace": "Late.Generation",
+    "references": [
+        "Late.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

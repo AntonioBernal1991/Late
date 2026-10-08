@@ -1,0 +1,19 @@
+{
+    "name": "Late.Editor",
+    "rootNamespace": "Late.EditorTools",
+    "references": [
+        "Late.Core",
+        "Late.Generation"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
