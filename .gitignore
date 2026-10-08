@@ -1,18 +1,18 @@
-# ---------- Cliente Unity (client/) ----------
+# ---------- Cliente Unity (LateGame/) ----------
 # Carpetas que Unity regenera
-/client/[Ll]ibrary/
-/client/[Tt]emp/
-/client/[Oo]bj/
-/client/[Bb]uild/
-/client/[Bb]uilds/
-/client/[Ll]ogs/
-/client/[Uu]ser[Ss]ettings/
-/client/[Mm]emoryCaptures/
-/client/[Rr]ecordings/
+/LateGame/[Ll]ibrary/
+/LateGame/[Tt]emp/
+/LateGame/[Oo]bj/
+/LateGame/[Bb]uild/
+/LateGame/[Bb]uilds/
+/LateGame/[Ll]ogs/
+/LateGame/[Uu]ser[Ss]ettings/
+/LateGame/[Mm]emoryCaptures/
+/LateGame/[Rr]ecordings/
 
 # Proyectos y soluciones que genera Unity
-/client/*.csproj
-/client/*.sln
+/LateGame/*.csproj
+/LateGame/*.sln
 
 # Compilaciones y paquetes
 *.apk
