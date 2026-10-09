@@ -24,19 +24,19 @@ git lfs install
 git lfs pull
 ```
 
-El proyecto de Unity está en la carpeta `client/`: ábrelo desde Unity Hub con *Add project from disk*.
+El proyecto de Unity está en la carpeta `LateGame/`: ábrelo desde Unity Hub con *Add project from disk*.
 
 ## Estructura
 
 | Carpeta | Contenido |
 |---|---|
-| `client/` | Juego en Unity para Android y Windows |
+| `LateGame/` | Juego en Unity para Android y Windows |
 | `server/` | API REST en ASP.NET Core: usuarios, partidas y ranking |
 | `shared/` | Modelos de datos comunes al cliente y al servidor |
 | `docker/` | Contenedores de la API y la base de datos MySQL |
 | `docs/` | Anteproyecto y documentación técnica |
 
-Dentro del cliente, el código y los recursos propios están en `client/Assets/Late/`:
+Dentro del cliente, el código y los recursos propios están en `LateGame/Assets/Late/`:
 
 | Carpeta | Contenido |
 |---|---|
@@ -48,7 +48,7 @@ Dentro del cliente, el código y los recursos propios están en `client/Assets/L
 | `Audio` | Música y efectos |
 | `Scenes` | Escenas del juego |
 
-Los recursos de terceros van en `client/Assets/ThirdParty/`.
+Los recursos de terceros van en `LateGame/Assets/ThirdParty/`.
 
 ## Fases
 
@@ -74,4 +74,15 @@ Los cambios de configuración o documentación que no corresponden a una tarea u
 
 ## Recursos de terceros
 
-Los recursos de terceros que use el juego se listarán aquí con su licencia.
+Solo se incluyen los archivos que usa el juego, en `LateGame/Assets/ThirdParty/` (salvo TextMesh Pro, que va en su carpeta estándar).
+
+| Recurso | Uso | Licencia |
+|---|---|---|
+| EYE ADVANCED (Tanuki Digital) | Ojo de la secuencia final | Asset Store, de pago: no redistribuir |
+| Rust Key | Llave | Asset Store |
+| SpaceSkies Free | Skyboxes de los niveles | Asset Store, gratuito |
+| Progressive Trance Vol. 1 | Música de los niveles | Asset Store |
+| JetBrains Mono | Fuente de la UI | SIL Open Font License |
+| TextMesh Pro | Textos de la UI | Paquete de Unity |
+
+Por las licencias de la Asset Store, el repositorio debe ser privado.

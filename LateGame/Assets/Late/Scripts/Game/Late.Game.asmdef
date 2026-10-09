@@ -1,0 +1,19 @@
+{
+    "name": "Late.Game",
+    "rootNamespace": "Late.Game",
+    "references": [
+        "Late.Core",
+        "Late.Audio",
+        "Late.Gameplay",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

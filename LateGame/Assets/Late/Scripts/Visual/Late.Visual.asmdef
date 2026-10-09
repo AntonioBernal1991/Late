@@ -1,0 +1,16 @@
+{
+    "name": "Late.Visual",
+    "rootNamespace": "Late.Visual",
+    "references": [
+        "Late.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

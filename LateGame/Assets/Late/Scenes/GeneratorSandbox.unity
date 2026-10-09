@@ -248,13 +248,6 @@ MonoBehaviour:
   _settings: {fileID: 11400000, guid: 22556e32a94fd9f4e8888ea04be95a38, type: 2}
   _holdSpaceToGenerate: 0
   _generateInstantly: 0
-  _modulePrefabExportFolder: Assets/Late/Levels/Modules
-  _exportStripInactiveChildren: 1
-  _autoExportModulePrefabsAfterGeneration: 0
-  _mapPrefabExportFolder: Assets/Late/Levels/Maps
-  _autoExportMapPrefabAfterGeneration: 0
-  _mapExportRemoveCombinedMeshes: 1
-  _mapExportEnableAllCubeRenderers: 1
 --- !u!4 &1291851595
 Transform:
   m_ObjectHideFlags: 0
