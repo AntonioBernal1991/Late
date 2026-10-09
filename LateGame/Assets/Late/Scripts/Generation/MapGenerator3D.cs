@@ -1,7 +1,6 @@
 using System.Collections;
 using Late.Core;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Late.Generation
 {
@@ -55,9 +54,6 @@ namespace Late.Generation
         {
             if (_mazeRoot == null) return;
 
-            Random.InitState(_settings.Seed);
-            int baseSeed = Random.state.GetHashCode();
-
             Pacer = new GenerationPacer(_generateInstantly, _holdSpaceToGenerate);
             _queue = new ModuleQueue();
 
@@ -65,7 +61,7 @@ namespace Late.Generation
             // del generador (no de MazeRoot) para que no acaben dentro del mapa exportado.
             int poolSize = _settings.ModuleWidth * _settings.ModuleHeight * (_settings.ModuleCount + 1);
             var pool = new ObjectPool(_settings.CubePrefab, poolSize, transform);
-            var pathGenerator = new PathGenerator(this, pool, baseSeed);
+            var pathGenerator = new PathGenerator(this, pool, _settings.BaseSeed);
             _moduleGenerator = new ModuleGenerator(this, pool, _queue, pathGenerator, _mazeRoot);
 
             // El primer módulo está en el origen y su camino empieza en el centro.

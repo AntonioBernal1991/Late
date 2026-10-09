@@ -58,6 +58,12 @@ namespace Late.Generation
 
         public ModuleGrid Grid => new ModuleGrid(_moduleWidth, _moduleHeight);
 
+        /// <summary>
+        /// Semilla base de los generadores aleatorios de cada módulo. Se deriva solo de la semilla
+        /// configurada (hash multiplicativo de Knuth), así que es la misma en cualquier sesión y equipo.
+        /// </summary>
+        public int BaseSeed => unchecked((int)((uint)_seed * 2654435761u));
+
         /// <summary>Tamaño de un módulo en el mundo, sin el hueco entre módulos.</summary>
         public Vector2 ModuleWorldSize => new Vector2(_moduleWidth * _tileSpacing, _moduleHeight * _tileSpacing);
 
