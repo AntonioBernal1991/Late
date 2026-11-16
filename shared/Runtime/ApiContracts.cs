@@ -63,6 +63,23 @@ namespace Late.Shared
         public int Rejected { get; set; }
     }
 
+    /// <summary>Progreso de un nivel para la cuenta.</summary>
+    public class LevelProgress
+    {
+        public int LevelOrder { get; set; }
+
+        /// <summary>Mejor tiempo ganando a la música; null si no lo ha ganado nunca.</summary>
+        public double? BestSeconds { get; set; }
+    }
+
+    /// <summary>GET /api/progress: el progreso de la cuenta, para seguir en cualquier dispositivo.</summary>
+    public class ProgressResponse
+    {
+        /// <summary>Último nivel desbloqueado (0 = solo el primero). Ganar un nivel desbloquea el siguiente.</summary>
+        public int HighestUnlockedLevel { get; set; }
+        public List<LevelProgress> Levels { get; set; } = new List<LevelProgress>();
+    }
+
     /// <summary>GET /api/levels</summary>
     public class LevelDto
     {

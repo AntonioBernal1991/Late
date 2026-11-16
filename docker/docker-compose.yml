@@ -2,7 +2,7 @@
 #   cd docker
 #   cp .env.example .env   (y cambia las contraseñas y la clave)
 #   docker compose up -d --build
-# API en http://localhost:8080 (Swagger en /swagger si SWAGGER_ENABLED=true).
+# API en http://localhost:5080 (Swagger en /swagger si SWAGGER_ENABLED=true).
 
 name: late
 
@@ -40,7 +40,7 @@ services:
       Database__MigrateOnStartup: "true"
       Swagger__Enabled: ${SWAGGER_ENABLED:-false}
     ports:
-      - "${API_PORT:-8080}:8080"
+      - "${API_PORT:-5080}:8080"
 
 volumes:
   mysql-data:
