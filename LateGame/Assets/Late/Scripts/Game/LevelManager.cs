@@ -24,7 +24,13 @@ namespace Late.Game
         [Header("Depuración")]
         [SerializeField] private bool log = false;
 
-        private IProgressStore _store = new InMemoryProgressStore();
+        /// <summary>
+        /// De dónde sale el almacén de progreso. Lo registra el ensamblado de datos al arrancar
+        /// (SQLite); si nadie lo registra, el progreso solo dura mientras el juego está abierto.
+        /// </summary>
+        public static System.Func<IProgressStore> StoreFactory { get; set; }
+
+        private IProgressStore _store;
         private int _unlockedUpToIndex;
 
         /// <summary>Cambia dónde se guarda el progreso (SQLite, API...). Recarga lo desbloqueado.</summary>
@@ -43,6 +49,7 @@ namespace Late.Game
                 return;
             }
             Instance = this;
+            _store = StoreFactory?.Invoke() ?? new InMemoryProgressStore();
             _unlockedUpToIndex = _store.LoadHighestUnlockedRun();
         }
 

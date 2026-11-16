@@ -1,0 +1,17 @@
+{
+    "name": "Late.Data",
+    "rootNamespace": "Late.Data",
+    "references": [
+        "Late.Game",
+        "Gilzoide.SqliteNet"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

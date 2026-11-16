@@ -8,7 +8,9 @@
         "Late.Generation",
         "Late.Gameplay",
         "Late.Game",
-        "Late.Editor"
+        "Late.Editor",
+        "Late.Data",
+        "Gilzoide.SqliteNet"
     ],
     "includePlatforms": [
         "Editor"

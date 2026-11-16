@@ -3,7 +3,8 @@
     "rootNamespace": "Late.EditorTools",
     "references": [
         "Late.Core",
-        "Late.Generation"
+        "Late.Generation",
+        "Late.Data"
     ],
     "includePlatforms": [
         "Editor"
