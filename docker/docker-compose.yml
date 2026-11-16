@@ -1,0 +1,46 @@
+# API de Late + MySQL.
+#   cd docker
+#   cp .env.example .env   (y cambia las contraseñas y la clave)
+#   docker compose up -d --build
+# API en http://localhost:8080 (Swagger en /swagger si SWAGGER_ENABLED=true).
+
+name: late
+
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: late
+      MYSQL_USER: late
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Falta MYSQL_PASSWORD en .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Falta MYSQL_ROOT_PASSWORD en .env}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    # Solo accesible desde la API. Para inspeccionarla desde el equipo, descomenta:
+    # ports:
+    #   - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "late", "-p${MYSQL_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Default: "server=db;port=3306;database=late;user=late;password=${MYSQL_PASSWORD}"
+      Jwt__Key: ${JWT_KEY:?Falta JWT_KEY en .env}
+      Database__MigrateOnStartup: "true"
+      Swagger__Enabled: ${SWAGGER_ENABLED:-false}
+    ports:
+      - "${API_PORT:-8080}:8080"
+
+volumes:
+  mysql-data:

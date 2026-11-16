@@ -1,0 +1,9 @@
+# El contexto de la imagen de la API es la raíz del repo: solo hacen falta server/ y shared/.
+*
+!server/src/
+!shared/
+**/bin/
+**/obj/
+shared/bin~/
+shared/obj~/
+**/*.meta

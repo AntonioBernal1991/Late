@@ -30,6 +30,8 @@ sysinfo.txt
 # ---------- Servidor y librerías .NET (server/, shared/) ----------
 [Bb]in/
 [Oo]bj/
+/shared/bin~/
+/shared/obj~/
 TestResults/
 *.user
 
@@ -55,4 +57,6 @@ Thumbs.db
 # ---------- Secretos y configuración local (nunca subir) ----------
 *.env
 .env*
+# La plantilla sin secretos sí se sube
+!.env.example
 appsettings.Development.json

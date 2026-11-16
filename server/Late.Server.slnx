@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Late.Api/Late.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Late.Api.Tests/Late.Api.Tests.csproj" />
+  </Folder>
+  <Project Path="../shared/Late.Shared.csproj" />
+</Solution>

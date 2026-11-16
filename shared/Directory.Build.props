@@ -1,0 +1,8 @@
+<Project>
+  <!-- shared/ también es un paquete de Unity: Unity ignora las carpetas que terminan en «~»,
+       así no importa los archivos que genera dotnet build. -->
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj~/</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(MSBuildThisFileDirectory)bin~/</BaseOutputPath>
+  </PropertyGroup>
+</Project>

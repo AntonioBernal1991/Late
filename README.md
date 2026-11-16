@@ -15,7 +15,7 @@ En desarrollo. El proyecto se construye por partes, siguiendo el RFTP (requisito
 
 - Unity 2022.3.38f1 LTS
 - Git LFS, para audio, texturas, modelos y niveles
-- .NET 8 SDK y Docker, para el servidor (a partir de la fase 5)
+- Docker, para el servidor (y .NET 10 SDK si se quiere compilar sin Docker)
 
 Después de clonar el repositorio, ejecuta:
 
