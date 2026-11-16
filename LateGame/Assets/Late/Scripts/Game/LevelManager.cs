@@ -58,7 +58,7 @@ namespace Late.Game
             if (!Application.isPlaying) RefreshButtons();
         }
 
-        public bool IsUnlocked(int runIndex) => runIndex >= 0 && runIndex <= _unlockedUpToIndex;
+        public bool IsUnlocked(int runIndex) => RunProgression.IsUnlocked(_unlockedUpToIndex, runIndex);
 
         private void OnRunFinished(RunResult result)
         {
@@ -66,9 +66,10 @@ namespace Late.Game
 
             _store.SaveRunResult(result);
 
-            if (result.BeatTheMusic && result.RunIndex + 1 > _unlockedUpToIndex)
+            int unlocked = RunProgression.HighestUnlockedAfter(_unlockedUpToIndex, result);
+            if (unlocked != _unlockedUpToIndex)
             {
-                _unlockedUpToIndex = result.RunIndex + 1;
+                _unlockedUpToIndex = unlocked;
                 _store.SaveHighestUnlockedRun(_unlockedUpToIndex);
             }
 
