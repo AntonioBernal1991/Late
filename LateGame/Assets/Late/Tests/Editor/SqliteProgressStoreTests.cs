@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Late.Data;
@@ -136,6 +137,48 @@ namespace Late.Tests
 
             _store.SaveSetting("idioma", "es");
             Assert.AreEqual("es", _store.LoadSetting("idioma"));
+        }
+
+        [Test]
+        public void ProgresoDeOtraCuenta_SustituyeAlDelDispositivo()
+        {
+            // El dispositivo tenía el progreso de otra cuenta: Run2 desbloqueado y un tiempo en Run0.
+            _store.SaveRunResult(new RunResult(0, 40f, true));
+            _store.SaveHighestUnlockedRun(2);
+
+            _store.ApplyAccountProgress(1, new Dictionary<int, double> { [0] = 55.5 }, replace: true);
+
+            Assert.AreEqual(1, _store.LoadHighestUnlockedRun());
+            Assert.AreEqual(55.5, _store.LoadBestTime(0).Value, 1e-4);
+            Assert.IsNull(_store.LoadBestTime(1));
+        }
+
+        [Test]
+        public void ProgresoDeLaMismaCuenta_SeQuedaLoMejorDeCadaLado()
+        {
+            // En el dispositivo: Run1 ganado sin conexión (aún no lo sabe el servidor).
+            _store.SaveRunResult(new RunResult(0, 60f, true));
+            _store.SaveRunResult(new RunResult(1, 45f, true));
+            _store.SaveHighestUnlockedRun(2);
+
+            // En el servidor: solo Run0, pero con un tiempo mejor (jugado en otro móvil).
+            _store.ApplyAccountProgress(1, new Dictionary<int, double> { [0] = 50.0 }, replace: false);
+
+            Assert.AreEqual(2, _store.LoadHighestUnlockedRun());
+            Assert.AreEqual(50.0, _store.LoadBestTime(0).Value, 1e-4);
+            Assert.AreEqual(45.0, _store.LoadBestTime(1).Value, 1e-4);
+        }
+
+        [Test]
+        public void SustituirElProgreso_NoTocaLasPendientesNiLosAjustes()
+        {
+            _store.SaveRunResult(new RunResult(0, 40f, true));
+            _store.SaveSetting("idioma", "en");
+
+            _store.ApplyAccountProgress(0, new Dictionary<int, double>(), replace: true);
+
+            Assert.AreEqual(1, _store.LoadPendingResults().Count);
+            Assert.AreEqual("en", _store.LoadSetting("idioma"));
         }
 
         [Test]

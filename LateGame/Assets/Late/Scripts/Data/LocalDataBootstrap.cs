@@ -28,7 +28,10 @@ namespace Late.Data
             Application.quitting += Close;
         }
 
-        private static IProgressStore GetOrOpenStore()
+        private static IProgressStore GetOrOpenStore() => OpenStore() ?? (IProgressStore)new InMemoryProgressStore();
+
+        /// <summary>El almacén SQLite compartido; lo abre la primera vez. Null si no se puede abrir.</summary>
+        public static SqliteProgressStore OpenStore()
         {
             if (_store != null) return _store;
             try
@@ -40,7 +43,7 @@ namespace Late.Data
             {
                 // Sin base de datos el juego sigue funcionando; solo se pierde el progreso al cerrar.
                 Debug.LogError($"[LocalData] No se pudo abrir '{DatabasePath}': {e.Message}. Se usa el progreso en memoria.");
-                return new InMemoryProgressStore();
+                return null;
             }
         }
 

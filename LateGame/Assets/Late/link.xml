@@ -1,0 +1,8 @@
+<!--
+  Lo que el recorte de código de IL2CPP no debe quitar. Newtonsoft.Json crea los DTO por reflexión,
+  así que sus propiedades parecen "no usadas" aunque lo estén. Necesario si se sube el nivel de
+  Managed Stripping por encima de Minimal.
+-->
+<linker>
+  <assembly fullname="Late.Shared" preserve="all" />
+</linker>

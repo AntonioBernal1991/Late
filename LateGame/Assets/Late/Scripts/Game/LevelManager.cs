@@ -65,6 +65,14 @@ namespace Late.Game
             if (!Application.isPlaying) RefreshButtons();
         }
 
+        /// <summary>Vuelve a leer lo desbloqueado (p. ej. tras cargar el progreso de la cuenta).</summary>
+        public void ReloadProgress()
+        {
+            if (_store == null) return;
+            _unlockedUpToIndex = _store.LoadHighestUnlockedRun();
+            RefreshButtons();
+        }
+
         public bool IsUnlocked(int runIndex) => RunProgression.IsUnlocked(_unlockedUpToIndex, runIndex);
 
         private void OnRunFinished(RunResult result)

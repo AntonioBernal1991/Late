@@ -21,11 +21,25 @@ namespace Late.Data
         }
     }
 
+    /// <summary>Partidas jugadas que aún no ha confirmado el servidor.</summary>
+    public interface IPendingResultsStore
+    {
+        IReadOnlyList<PendingResult> LoadPendingResults();
+        void RemovePendingResults(IEnumerable<int> ids);
+    }
+
+    /// <summary>Ajustes clave-valor (idioma, sesión...).</summary>
+    public interface ISettingsStore
+    {
+        string LoadSetting(string key, string defaultValue = null);
+        void SaveSetting(string key, string value);
+    }
+
     /// <summary>
     /// Progreso, resultados y ajustes guardados en SQLite (R04). Funciona sin conexión: cada partida
     /// queda en PENDIENTES hasta que se envíe al ranking (fase del servidor).
     /// </summary>
-    public sealed class SqliteProgressStore : IProgressStore, IDisposable
+    public sealed class SqliteProgressStore : IProgressStore, IPendingResultsStore, ISettingsStore, IDisposable
     {
         private const string DateFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
 
@@ -91,6 +105,37 @@ namespace Late.Data
             });
         }
 
+        /// <summary>
+        /// Aplica el progreso guardado en la cuenta del servidor.
+        /// <paramref name="replace"/> = true cuando entra otra cuenta: se olvida el progreso local anterior.
+        /// Con false (la misma cuenta) se combinan: se queda lo más avanzado y el mejor tiempo de cada lado,
+        /// por si hay partidas jugadas sin conexión que el servidor aún no conoce.
+        /// </summary>
+        public void ApplyAccountProgress(int highestUnlocked, IReadOnlyDictionary<int, double> bestTimes, bool replace)
+        {
+            _db.RunInTransaction(() =>
+            {
+                if (replace) _db.DeleteAll<ProgresoRow>();
+
+                for (int level = 0; level <= highestUnlocked; level++)
+                {
+                    _db.Execute(
+                        "INSERT INTO progreso (nivel_id, desbloqueado) VALUES (?, 1) " +
+                        "ON CONFLICT(nivel_id) DO UPDATE SET desbloqueado = 1", level);
+                }
+
+                foreach (KeyValuePair<int, double> best in bestTimes)
+                {
+                    _db.Execute(
+                        "INSERT INTO progreso (nivel_id, desbloqueado, mejor_tiempo) VALUES (?, 1, ?) " +
+                        "ON CONFLICT(nivel_id) DO UPDATE SET mejor_tiempo = " +
+                        "CASE WHEN mejor_tiempo IS NULL OR excluded.mejor_tiempo < mejor_tiempo " +
+                        "THEN excluded.mejor_tiempo ELSE mejor_tiempo END",
+                        best.Key, best.Value);
+                }
+            });
+        }
+
         // ---------- Tiempos ----------
 
         /// <summary>Mejor tiempo ganando a la música en ese nivel, o null si no se ha ganado nunca.</summary>
@@ -127,8 +172,12 @@ namespace Late.Data
         public string LoadSetting(string key, string defaultValue = null) =>
             _db.Find<AjusteRow>(key)?.Valor ?? defaultValue;
 
-        public void SaveSetting(string key, string value) =>
-            _db.InsertOrReplace(new AjusteRow { Clave = key, Valor = value });
+        /// <summary>Guarda el ajuste; con valor null lo borra.</summary>
+        public void SaveSetting(string key, string value)
+        {
+            if (value == null) _db.Delete<AjusteRow>(key);
+            else _db.InsertOrReplace(new AjusteRow { Clave = key, Valor = value });
+        }
 
         public void Dispose() => _db.Dispose();
     }

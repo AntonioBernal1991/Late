@@ -4,7 +4,9 @@
     "references": [
         "Late.Core",
         "Late.Generation",
-        "Late.Data"
+        "Late.Data",
+        "Late.Localization",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

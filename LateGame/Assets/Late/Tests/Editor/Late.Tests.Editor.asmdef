@@ -10,7 +10,10 @@
         "Late.Game",
         "Late.Editor",
         "Late.Data",
-        "Gilzoide.SqliteNet"
+        "Gilzoide.SqliteNet",
+        "Late.Online",
+        "Late.Localization",
+        "Late.Shared"
     ],
     "includePlatforms": [
         "Editor"
@@ -19,7 +22,8 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Newtonsoft.Json.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
