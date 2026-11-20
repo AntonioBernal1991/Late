@@ -1,0 +1,617 @@
+<!-- ===================== PORTADA ===================== -->
+<section class="cover">
+  <div class="cover-logo">{{SVG:logo}}</div>
+  <div class="cover-title">
+    <p class="cover-kicker">Trabajo de Fin de Grado · Entrega parcial (85 %)</p>
+    <h1 class="cover-name">LATE</h1>
+    <p class="cover-sub">Videojuego multiplataforma de laberintos procedurales contra el tiempo</p>
+    <p class="cover-course">CFGS Desarrollo de Aplicaciones Multiplataforma · Modalidad online</p>
+  </div>
+  <div class="cover-people">
+    <p><span>Alumno</span>Antonio Bernal</p>
+    <p><span>Tutor del TFG</span>Jordi Cidoncha</p>
+    <p><span>Curso académico</span>2026-2027</p>
+    <p><span>Fecha de entrega</span>20/11/2026</p>
+    <p><span>Repositorio</span>github.com/AntonioBernal1991/Late</p>
+  </div>
+</section>
+
+<!-- ===================== ÍNDICES ===================== -->
+<section class="page">
+  <h1>Índices</h1>
+  <h3 class="idx">Índice de contenidos</h3>
+  {{TOC}}
+</section>
+<section class="page">
+  <h3 class="idx">Índice de tablas</h3>
+  {{LOT}}
+  <h3 class="idx">Índice de ilustraciones</h3>
+  {{LOF}}
+</section>
+
+<!-- ===================== ABSTRACT ===================== -->
+<section class="page">
+  <h1 class="toc">Abstract</h1>
+  <div class="abstract">
+    <div>
+      <h4>Resumen</h4>
+      <p>Late es un videojuego 3D para Android y PC en el que el jugador debe llegar al final de un laberinto antes de que termine la música: la canción es el cronómetro y no hay reloj en pantalla. El jugador avanza solo y únicamente decide cuándo girar, de modo que cada partida, de un minuto aproximadamente, exige memorizar el camino y girar a tiempo.</p>
+      <p>Los niveles se crean con un generador procedural propio integrado en el editor de Unity, se ajustan a mano y se optimizan para el móvil con una herramienta propia. El proyecto sigue una arquitectura cliente-servidor: el juego en Unity 2022.3 con C#, una base de datos SQLite local, una API REST en ASP.NET Core 10 y MySQL en contenedores Docker.</p>
+      <p>Para jugar hace falta una cuenta: el progreso y los tiempos se guardan en ella y se recuperan en cualquier dispositivo, y cada nivel tiene un ranking online. El juego funciona sin conexión y envía las partidas pendientes cuando la recupera. Está en español e inglés, va a 60 FPS en Android y cuenta con 96 pruebas automáticas. Para la entrega final quedan la integración continua y el cierre de la memoria.</p>
+    </div>
+    <div>
+      <h4>Abstract</h4>
+      <p>Late is a 3D game for Android and PC in which the player must reach the end of a maze before the music ends: the song is the timer and there is no clock on screen. The player moves forward automatically and only decides when to turn, so each one-minute run demands memorising the path and turning on time.</p>
+      <p>Levels are built with a custom procedural generator inside the Unity editor, hand-tuned and then optimised for mobile with a custom tool. The project follows a client-server architecture: the game in Unity 2022.3 with C#, a local SQLite database, a REST API in ASP.NET Core 10 and MySQL in Docker containers.</p>
+      <p>Playing requires an account: progress and best times are stored in it and restored on any device, and each level has an online leaderboard. The game works offline and uploads pending runs when the connection returns. It is available in Spanish and English, runs at 60 FPS on Android and has 96 automated tests. Continuous integration and the final version of this report are left for the final delivery.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== JUSTIFICACIÓN ===================== -->
+<section class="page">
+  <h1 class="toc">Justificación del proyecto</h1>
+
+  <h2 class="toc">Motivación principal</h2>
+  <p>Late nace de una idea sencilla: convertir la música en el cronómetro. Sin reloj en pantalla, el jugador oye cómo se acerca el final de la canción, y esa tensión por no llegar a tiempo es el núcleo de la experiencia y lo que invita a repetir. Las partidas cortas, de un minuto aproximadamente, encajan con el uso habitual del móvil; por eso el rendimiento es una prioridad: cualquier tirón rompe la carrera contra la música.</p>
+  <p>El reto técnico es crear muchos niveles con poco esfuerzo, y para ello se ha desarrollado un generador procedural propio. El proyecto integra los módulos de Programación multimedia y dispositivos móviles, Acceso a datos, Programación de servicios y procesos y Desarrollo de interfaces.</p>
+
+  <h2 class="toc">Estado de la cuestión y público objetivo</h2>
+  <p>El público son jugadores casuales de móvil y PC que buscan partidas cortas, rejugables y con un reto medible. Late combina rasgos de géneros conocidos que hasta ahora no se habían juntado: el control mínimo de los <em>endless runners</em>, la memorización rítmica de los juegos musicales y el objetivo cerrado de los laberintos.</p>
+  <table>
+    <thead><tr><th>Referencia</th><th>Qué comparte con Late</th><th>Qué le falta</th><th>Qué aporta Late</th></tr></thead>
+    <tbody>
+      <tr><td><em>Temple Run</em> (Imangi Studios, 2011) y otros <em>endless runners</em></td><td>El personaje avanza solo y el jugador gira deslizando el dedo.</td><td>El recorrido es infinito y aleatorio: no se puede aprender.</td><td>Laberintos cerrados con un final, que se memorizan y se mejoran partida a partida.</td></tr>
+      <tr><td><em>Geometry Dash</em> (RobTop Games, 2013)</td><td>La música marca el ritmo y hay que memorizar el recorrido.</td><td>La música acompaña, pero no decide el resultado.</td><td>La canción es el límite de tiempo: llegar tarde es perder.</td></tr>
+      <tr><td>Juegos de laberintos clásicos</td><td>Encontrar la salida de un laberinto.</td><td>Vista cenital, sin presión de tiempo ni competición.</td><td>Primera persona, avance automático, llave y puerta, cuentas y ranking por nivel.</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Comparativa razonada con soluciones existentes}}</p>
+  <p>La conclusión de la comparativa es que el hueco de Late está en la combinación: un reto corto y memorizable, medido por la música y comparable con otros jugadores. De ahí salen los requisitos del proyecto: generar muchos niveles (R01), la carrera contra la música (R02), el rendimiento en móvil (R03) y la parte online de cuentas y ranking (R05, R06).</p>
+</section>
+
+<!-- ===================== INTRODUCCIÓN ===================== -->
+<section class="page">
+  <h1 class="toc">Introducción</h1>
+  <h2 class="toc">Principales funciones</h2>
+  <ul>
+    <li><strong>Carrera contra la música.</strong> El jugador avanza solo por el laberinto y gira 90° con A/D o deslizando el dedo. Si cruza la meta mientras suena la canción, gana; si la canción termina antes, pierde, aunque puede seguir hasta la salida vigilado por un ojo cuya pupila se dilata al acercarse.</li>
+    <li><strong>Niveles progresivos.</strong> Ganar un nivel desbloquea el siguiente, que es más rápido (Run0 a velocidad 9, Run1 a 22) y añade mecánicas como la llave escondida y la puerta cerrada.</li>
+    <li><strong>Generador procedural de niveles.</strong> Integrado en el editor de Unity: genera un laberinto por módulos a partir de una semilla, lo hornea como prefab para ajustarlo a mano y lo optimiza para el móvil.</li>
+    <li><strong>Cuenta obligatoria y progreso en la nube.</strong> Lo primero es entrar o registrarse. El nivel alcanzado y los mejores tiempos pertenecen a la cuenta y se recuperan en cualquier dispositivo.</li>
+    <li><strong>Ranking por nivel.</strong> El mejor tiempo de cada jugador ganando a la música; a igual tiempo, va delante quien lo consiguió antes.</li>
+    <li><strong>Juego sin conexión.</strong> Cada partida se guarda en SQLite y se envía al servidor en cuanto hay red, sin duplicarse.</li>
+    <li><strong>Dos idiomas.</strong> Español e inglés, con el idioma del sistema por defecto.</li>
+  </ul>
+
+  <h2 class="toc">Problemas que resuelve</h2>
+  <table>
+    <thead><tr><th>Problema</th><th>Solución en Late</th></tr></thead>
+    <tbody>
+      <tr><td>Diseñar niveles a mano es lento.</td><td>Un generador procedural crea el laberinto en segundos y el diseñador solo lo ajusta.</td></tr>
+      <tr><td>Miles de cubos hunden el rendimiento en el móvil.</td><td>Ajustes automáticos de calidad, <em>static batching</em> y una herramienta que une las mallas y quita las caras ocultas.</td></tr>
+      <tr><td>Las partidas sin conexión se pierden.</td><td>SQLite guarda cada partida como pendiente hasta que el servidor confirma que la tiene.</td></tr>
+      <tr><td>Un reenvío podría contar dos veces la misma partida.</td><td>La base de datos no admite dos partidas con el mismo usuario, nivel y fecha.</td></tr>
+      <tr><td>Cambiar de móvil hace perder el progreso.</td><td>El progreso se calcula en el servidor a partir de las partidas de la cuenta.</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Problemas que resuelve el proyecto}}</p>
+
+  <h2 class="toc">Requisitos principales</h2>
+  <p>Siete requisitos están terminados. Del octavo (R08) están hechas las pruebas automáticas; la integración continua queda para la entrega final. El desglose completo está en el apartado Objetivos.</p>
+  <table class="req2">
+    <tbody>
+      <tr><td>R01</td><td>Crear niveles rápidamente.</td><td>R05</td><td>Solo se juega con una cuenta.</td></tr>
+      <tr><td>R02</td><td>Llegar a la meta antes de que termine la música.</td><td>R06</td><td>Ranking por nivel.</td></tr>
+      <tr><td>R03</td><td>Ir fluido en el móvil (60 FPS).</td><td>R07</td><td>Español e inglés.</td></tr>
+      <tr><td>R04</td><td>Guardar el progreso sin conexión.</td><td>R08</td><td>Pruebas automáticas e integración continua.</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Requisitos principales}}</p>
+</section>
+
+<!-- ===================== OBJETIVOS (RFTP) ===================== -->
+<section class="page">
+  <h1 class="toc">Objetivos</h1>
+  <p>Los objetivos se expresan con la estructura RFTP: <strong>R</strong>equisitos en lenguaje coloquial, <strong>F</strong>unciones en lenguaje técnico, <strong>T</strong>areas que describen el alcance de cada función y <strong>P</strong>ruebas que demuestran que cada tarea está cumplida. Todo está implementado salvo la integración continua (R08F02), que queda para la entrega final; cada prueba indica cómo se ha verificado.</p>
+  <table class="rftp">
+    <thead><tr><th>Código</th><th>Descripción</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr class="r"><td>R01</td><td>Los niveles se deben poder crear rápidamente.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R01F01</td><td>Generar un laberinto por módulos a partir de una semilla, con bifurcaciones y salas.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R01F01T01</td><td>Implementar MapGenerator3D, ModuleGenerator y PathGenerator.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R01F01T01P01</td><td>La misma semilla genera el mismo laberinto en dos sesiones distintas (34 módulos y 4.944 paredes en ambas); además, 5 pruebas automáticas de la semilla.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R01F01T02</td><td>Configurar cada tipo de nivel con un ScriptableObject (MapSettings).</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R01F01T02P01</td><td>Cambiar la semilla o el número de módulos en el asset genera otro laberinto sin tocar el código.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R01F02</td><td>Guardar el laberinto como nivel para ajustarlo a mano.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R01F02T01</td><td>Ventana del editor «Hornear»: guarda el mapa completo o un módulo como prefab.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R01F02T01P01</td><td>El prefab horneado se ve completo y se puede editar cubo a cubo.</td><td class="ok">Hecho</td></tr>
+
+      <tr class="r"><td>R02</td><td>El jugador debe llegar a la meta antes de que termine la música.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R02F01</td><td>El jugador avanza solo y gira 90° con A/D o deslizando el dedo.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R02F01T01</td><td>Implementar AutoForwardCameraController y SwipeDetector.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R02F01T01P01</td><td>Recorrer un nivel completo en PC y en un móvil Android.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R02F02</td><td>La canción es el cronómetro y decide el resultado al cruzar la meta.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R02F02T01</td><td>BackgroundMusicPlayer, meta (MazeEndTriggerLookAt) y RunResult en GameManager.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R02F02T01P01</td><td>Llegar con música muestra «Proceso completado»; sin música, «Proceso terminado».</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R02F03</td><td>Superar un nivel desbloquea el siguiente, que es más rápido.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R02F03T01</td><td>LevelManager, regla de desbloqueo en RunProgression y un RunTuning por nivel.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R02F03T01P01</td><td>Ganar Run0 desbloquea Run1, que avanza a velocidad 22 frente a 9 (6 pruebas automáticas).</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R02F04</td><td>Llave escondida y puerta que solo se abre con ella.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R02F04T01</td><td>KeyHider, KeyPickup, PlayerKeyInventory y LockedCube.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R02F04T01P01</td><td>Sin llave la puerta muestra un aviso; con llave aparece el icono y la puerta se desvanece.</td><td class="ok">Hecho</td></tr>
+
+      <tr class="r"><td>R03</td><td>El juego debe ir fluido en el móvil.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R03F01</td><td>Mantener 60 FPS en Android.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R03F01T01</td><td>MobilePerformanceBootstrap (60 FPS, resolución al 75 %, sin sombras) y <em>static batching</em>.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R03F01T01P01</td><td>Contador de FPS en un Android real: 60 FPS estables.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R03F02</td><td>Herramienta para optimizar los mapas ya ajustados.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R03F02T01</td><td>MapOptimizer y ventana «Optimizar»: quita duplicados y caras ocultas y une las mallas por módulo.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R03F02T01P01</td><td>El nivel optimizado conserva los colisionadores y se ve igual: 31 vistas comparadas por nivel (8 pruebas automáticas).</td><td class="ok">Hecho</td></tr>
+
+      <tr class="r"><td>R04</td><td>El progreso se debe guardar aunque no haya conexión.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R04F01</td><td>Guardar progreso, tiempos, partidas pendientes y ajustes en SQLite.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R04F01T01</td><td>SqliteProgressStore con las tablas PROGRESO, PENDIENTES y AJUSTES.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R04F01T01P01</td><td>El progreso sobrevive a cerrar y reabrir el juego (12 pruebas automáticas).</td><td class="ok">Hecho</td></tr>
+
+      <tr class="r"><td>R05</td><td>Solo se juega y se suben resultados con una cuenta.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R05F01</td><td>Registro e inicio de sesión seguros.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R05F01T01</td><td>Tabla USUARIOS y AuthController: contraseña con hash PBKDF2, token JWT y límite de 10 intentos por minuto.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R05F01T01P01</td><td>Registro, duplicados, validación, login y límite de intentos (14 pruebas de la API).</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R05F01T02</td><td>Pantalla de cuenta obligatoria antes de la portada.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R05F01T02P01</td><td>Sin sesión la pantalla de cuenta tapa todo; al entrar desaparece (prueba en la escena real).</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R05F02</td><td>El progreso pertenece a la cuenta y se recupera en cualquier dispositivo.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R05F02T01</td><td>GET /api/progress, calculado a partir de las partidas ganadas.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R05F02T01P01</td><td>Cada cuenta ve su propio progreso (5 pruebas de la API); otra cuenta no hereda el del dispositivo.</td><td class="ok">Hecho</td></tr>
+
+      <tr class="r"><td>R06</td><td>Los jugadores deben poder compararse en un ranking por nivel.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R06F01</td><td>Enviar resultados a la API sin duplicarlos, y los pendientes al recuperar la conexión.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R06F01T01</td><td>Tabla PARTIDAS, POST /api/runs y PendingResultsUploader en el juego.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R06F01T01P01</td><td>Reenviar no duplica; sin conexión las pendientes se quedan y se envían después.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R06F02</td><td>Consultar el ranking de cada nivel.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R06F02T01</td><td>GET /api/levels/{orden}/ranking y panel de ranking en el menú.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R06F02T01P01</td><td>Mejor tiempo por jugador, desempate por fecha y fila propia marcada «(tú)».</td><td class="ok">Hecho</td></tr>
+
+      <tr class="r"><td>R07</td><td>El juego debe estar en español e inglés.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R07F01</td><td>Textos en dos idiomas, idioma del sistema por defecto y elección guardada.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R07F01T01</td><td>Localization, tabla Strings y componente LocalizedText en los textos de la escena.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R07F01T01P01</td><td>Ninguna clave sin traducir y ningún botón se sale de la pantalla (9 pruebas automáticas).</td><td class="ok">Hecho</td></tr>
+
+      <tr class="r"><td>R08</td><td>El proyecto debe tener pruebas automáticas e integración continua.</td><td class="wip">En curso</td></tr>
+      <tr class="f"><td>R08F01</td><td>Pruebas automáticas del juego y de la API.</td><td class="ok">Hecho</td></tr>
+      <tr class="t"><td>R08F01T01</td><td>Unity Test Framework en el juego; xUnit y Testcontainers (MySQL real) en la API.</td><td class="ok">Hecho</td></tr>
+      <tr class="p"><td>R08F01T01P01</td><td>96 pruebas en verde: 62 del juego y 34 de la API.</td><td class="ok">Hecho</td></tr>
+      <tr class="f"><td>R08F02</td><td>Integración continua en GitHub.</td><td class="wip">Pendiente</td></tr>
+      <tr class="t"><td>R08F02T01</td><td>Workflows de GitHub Actions para compilar y probar el servidor y el juego en cada cambio.</td><td class="wip">Pendiente</td></tr>
+      <tr class="p"><td>R08F02T01P01</td><td>Ejecución de los workflows en verde tras un push.</td><td class="wip">Pendiente</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Estructura RFTP completa (Requisito, Función, Tarea, Prueba)}}</p>
+</section>
+
+<!-- ===================== DESCRIPCIÓN ===================== -->
+<section class="page">
+  <h1 class="toc">Descripción</h1>
+
+  <h2 class="toc">Arquitectura de la solución</h2>
+  <p>La arquitectura es cliente-servidor en tres capas. El cliente es el juego en Unity para Android y Windows; guarda sus datos en SQLite para funcionar sin conexión. El servidor es una API REST en ASP.NET Core 10 que gestiona usuarios, partidas, progreso y ranking sobre MySQL 8.4. La API y la base de datos se ejecutan en contenedores Docker.</p>
+  <figure>{{SVG:arq}}<figcaption>{{FIG:Diagrama de arquitectura de la solución}}</figcaption></figure>
+  <p><strong>Flujo de datos.</strong> El jugador entra con su cuenta y recibe un token JWT. Al entrar, el juego sube las partidas pendientes y descarga el progreso de la cuenta. Cada partida se guarda primero en SQLite y se envía al terminar; si no hay conexión queda pendiente y se reintenta cada minuto. El servidor descarta los reenvíos repetidos.</p>
+  <p><strong>Organización del código.</strong> El repositorio tiene una carpeta por capa: <code>LateGame/</code> (juego), <code>server/</code> (API y sus pruebas), <code>shared/</code> (contratos de la API comunes al juego y al servidor) y <code>docker/</code>. En el juego, cada carpeta de scripts es un ensamblado independiente y las dependencias van en una sola dirección.</p>
+  <table>
+    <thead><tr><th>Ensamblado</th><th>Contenido</th></tr></thead>
+    <tbody>
+      <tr><td>Late.Generation</td><td>Generador procedural de niveles</td></tr>
+      <tr><td>Late.Gameplay</td><td>Jugador, llave, puertas, meta y secuencia final</td></tr>
+      <tr><td>Late.Game</td><td>Flujo de la partida, progresión y ajustes de cada nivel</td></tr>
+      <tr><td>Late.Data</td><td>SQLite: progreso, partidas pendientes y ajustes</td></tr>
+      <tr><td>Late.Online</td><td>Cliente de la API, sesión, envío de partidas e interfaz de cuenta y ranking</td></tr>
+      <tr><td>Late.Localization</td><td>Textos en español e inglés</td></tr>
+      <tr><td>Late.Audio, Visual, Performance, Core</td><td>Música, ojo, rendimiento y utilidades</td></tr>
+      <tr><td>Late.Editor</td><td>Ventanas Hornear y Optimizar, idiomas y builds</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Ensamblados del cliente}}</p>
+  <p>Además del código, <code>Assets/Late/</code> contiene los recursos del juego:</p>
+  <table>
+    <thead><tr><th>Carpeta</th><th>Contenido</th></tr></thead>
+    <tbody>
+      <tr><td>Levels</td><td>Niveles horneados (Run0, Run1 y sus versiones _Opt), tipos de nivel (MapSettings) y ajustes de cada run (RunTuning)</td></tr>
+      <tr><td>Resources</td><td>Ajustes de la parte online (LateOnlineSettings)</td></tr>
+      <tr><td>Scenes</td><td>Main (menú), Run0, Run1 y GeneratorSandbox (generador)</td></tr>
+      <tr><td>Prefabs, Materials, Audio, UI</td><td>Recursos del juego: cubos, llave, meta, materiales, música y fuentes</td></tr>
+      <tr><td>Tests/Editor</td><td>Pruebas automáticas del juego</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Organización de carpetas de recursos del cliente}}</p>
+
+  <h3 class="toc">Configuración con ScriptableObjects</h3>
+  <p>Los datos de diseño no están en el código sino en ScriptableObjects, assets que se editan desde el Inspector: crear un nivel o ajustar su dificultad no requiere programar.</p>
+  <table>
+    <thead><tr><th>Asset</th><th>Qué guarda</th><th>Quién lo usa</th></tr></thead>
+    <tbody>
+      <tr><td><b>MapSettings</b> (uno por tipo de nivel)</td><td>Tamaño de los módulos, semilla, número de módulos, bifurcaciones, cuevas, prefab del cubo y materiales.</td><td>El generador: cambiando de asset se prototipa otro tipo de laberinto.</td></tr>
+      <tr><td><b>RunTuning</b> (uno por nivel)</td><td>Velocidad del jugador, frenado, duración del giro, canción y segundo de inicio. Run0: velocidad 9; Run1: 22.</td><td>GameManager: al cargar cada nivel aplica su RunTuning.</td></tr>
+      <tr><td><b>LateOnlineSettings</b></td><td>URL del servidor, segundos entre reintentos de envío, objeto del menú y fuente de la interfaz.</td><td>OnlineService y OnlineMenu.</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:ScriptableObjects de configuración}}</p>
+</section>
+
+<section class="page">
+  <h2 class="toc">Casos de uso</h2>
+  <p>El sistema tiene dos actores: el diseñador, que crea los niveles en el editor, y el jugador. Jugar y consultar el ranking exigen haber iniciado sesión.</p>
+  <figure>{{SVG:usecases}}<figcaption>{{FIG:Diagrama de casos de uso}}</figcaption></figure>
+
+  <table class="cu">
+    <tr><th colspan="2">CASO DE USO CU-01: Crear un nivel con el generador</th></tr>
+    <tr><td colspan="2"><b>DESCRIPCIÓN:</b> El diseñador abre la escena del generador, elige un tipo de nivel (MapSettings) y genera un laberinto. Lo prueba, lo ajusta a mano (caminos, módulos, llave, puertas, inicio y meta), lo hornea como prefab y crea su versión optimizada.</td></tr>
+    <tr><td><b>PRECONDICIONES:</b><br>Proyecto abierto en el editor de Unity.</td><td><b>POSTCONDICIONES:</b><br>Prefab del nivel guardado en Levels y su copia optimizada _Opt.</td></tr>
+    <tr><td><b>DATOS ENTRADA:</b><br>MapSettings: tamaño, semilla, número de módulos, cuevas.</td><td><b>DATOS SALIDA:</b><br>Prefab del mapa o de un módulo; prefab _Opt y sus mallas.</td></tr>
+    <tr><td><b>TABLAS:</b><br>Ninguna.</td><td><b>CLASES:</b><br>MapGenerator3D, ModuleGenerator, PathGenerator, MapSettings, MapBakerWindow, MapOptimizer.</td></tr>
+    <tr><td colspan="2"><b>INTERFACES:</b> escena GeneratorSandbox; ventanas Late › Generador › Hornear y Optimizar.</td></tr>
+  </table>
+  <p class="cap">{{TAB:Caso de uso CU-01 Crear un nivel con el generador}}</p>
+  <div class="wide">
+    <figure>{{PIC:gen_prototipo}}<figcaption>Prototipo recién generado (semilla 36, 22 módulos)</figcaption></figure>
+    <figure>{{PIC:gen_run0}}<figcaption>Nivel Run0 ajustado a mano</figcaption></figure>
+  </div>
+  <p class="cap fig">{{FIG:CU-01 prototipo recién generado y nivel Run0 ajustado a mano}}</p>
+</section>
+
+<section class="page">
+  <table class="cu">
+    <tr><th colspan="2">CASO DE USO CU-02: Jugar un nivel</th></tr>
+    <tr><td colspan="2"><b>DESCRIPCIÓN:</b> El jugador recorre el laberinto desde el inicio hasta la meta antes de que termine la canción. Avanza solo y decide cuándo girar; chocar o perderse en las salas le hace perder tiempo. Al cruzar la meta se registra la partida y, si ganó a la música, se desbloquea el siguiente nivel.</td></tr>
+    <tr><td><b>PRECONDICIONES:</b><br>Sesión iniciada (CU-04).<br>Nivel desbloqueado.</td><td><b>POSTCONDICIONES:</b><br>Partida guardada como pendiente y enviada al servidor.<br>Siguiente nivel desbloqueado si se ganó.</td></tr>
+    <tr><td><b>DATOS ENTRADA:</b><br>Giros (A/D o deslizar).</td><td><b>DATOS SALIDA:</b><br>Nivel, tiempo y si se ganó a la música (RunResult); fecha.</td></tr>
+    <tr><td><b>TABLAS:</b><br>PENDIENTES y PROGRESO (SQLite).<br>PARTIDAS (MySQL).</td><td><b>CLASES:</b><br>GameManager, AutoForwardCameraController, BackgroundMusicPlayer, LevelManager, OnlineService.</td></tr>
+    <tr><td colspan="2"><b>INTERFACES:</b> menú de niveles, escenas Run0 y Run1, pantallas «Proceso completado» y «Proceso terminado».</td></tr>
+  </table>
+  <p class="cap">{{TAB:Caso de uso CU-02 Jugar un nivel}}</p>
+  <div class="phones two">
+    <figure class="phone photo">{{IMG:movil_run0}}<figcaption>Run0</figcaption></figure>
+    <figure class="phone photo">{{IMG:movil_run1}}<figcaption>Run1: más rápido, otro cielo y otra canción</figcaption></figure>
+  </div>
+  <p class="cap fig">{{FIG:CU-02 en un móvil Android (el contador marca 60 FPS)}}</p>
+</section>
+
+<section class="page">
+  <table class="cu">
+    <tr><th colspan="2">CASO DE USO CU-03: Recoger la llave y abrir la puerta</th></tr>
+    <tr><td colspan="2"><b>DESCRIPCIÓN:</b> En los niveles con llave (Run1) la salida está cerrada. La llave aparece en un escondite distinto cada partida; al recogerla se muestra su icono y, al llegar a la puerta, esta se desvanece.</td></tr>
+    <tr><td><b>PRECONDICIONES:</b><br>Partida de un nivel con llave en curso.</td><td><b>POSTCONDICIONES:</b><br>Puerta abierta y llave gastada.</td></tr>
+    <tr><td><b>DATOS ENTRADA:</b><br>Contacto del jugador con la llave y con la puerta.</td><td><b>DATOS SALIDA:</b><br>Icono de la llave en la interfaz; puerta desactivada.</td></tr>
+    <tr><td><b>TABLAS:</b><br>Ninguna.</td><td><b>CLASES:</b><br>KeyHider, KeyPickup, PlayerKeyInventory, LockedCube.</td></tr>
+    <tr><td colspan="2"><b>INTERFACES:</b> icono de llave (abajo a la izquierda) y aviso «busca la llave».</td></tr>
+  </table>
+  <p class="cap">{{TAB:Caso de uso CU-03 Recoger la llave y abrir la puerta}}</p>
+  <div class="phones">
+    <figure class="phone photo">{{IMG:llave_1_escondida}}<figcaption>La llave escondida</figcaption></figure>
+    <figure class="phone photo">{{IMG:llave_2_recogida}}<figcaption>Llave recogida: icono abajo a la izquierda</figcaption></figure>
+    <figure class="phone photo">{{IMG:llave_3_puerta}}<figcaption>Puerta cerrada sin llave</figcaption></figure>
+    <figure class="phone photo">{{IMG:llave_4_abierta}}<figcaption>La puerta se desvanece</figcaption></figure>
+  </div>
+  <p class="cap fig">{{FIG:CU-03 en un móvil Android}}</p>
+</section>
+
+<section class="page">
+  <table class="cu">
+    <tr><th colspan="2">CASO DE USO CU-04: Registrarse e iniciar sesión</th></tr>
+    <tr><td colspan="2"><b>DESCRIPCIÓN:</b> Es lo primero que ve el jugador: sin cuenta no se puede jugar. Se registra con nombre, email y contraseña, o entra con nombre o email. Al entrar, el juego sube sus partidas pendientes y carga el progreso de la cuenta.</td></tr>
+    <tr><td><b>PRECONDICIONES:</b><br>Conexión con el servidor. Con una sesión guardada (30 días) se juega sin ella.</td><td><b>POSTCONDICIONES:</b><br>Token JWT guardado.<br>Niveles desbloqueados según la cuenta.</td></tr>
+    <tr><td><b>DATOS ENTRADA:</b><br>Nombre o email, contraseña (y email al registrarse).</td><td><b>DATOS SALIDA:</b><br>Token, nombre y caducidad; nivel desbloqueado y mejores tiempos.</td></tr>
+    <tr><td><b>TABLAS:</b><br>USUARIOS y PARTIDAS (MySQL).<br>AJUSTES y PROGRESO (SQLite).</td><td><b>CLASES:</b><br>AuthController, ProgressController, TokenService, AccountSession, OnlineService, OnlineMenu.</td></tr>
+    <tr><td colspan="2"><b>INTERFACES:</b> pantalla /L A T E/cuenta (entrar, crear cuenta, cerrar sesión). Errores: usuario o contraseña incorrectos, nombre o email ocupado, datos no válidos, demasiados intentos, sin conexión.</td></tr>
+  </table>
+  <p class="cap">{{TAB:Caso de uso CU-04 Registrarse e iniciar sesión}}</p>
+
+  <table class="cu">
+    <tr><th colspan="2">CASO DE USO CU-05: Consultar el ranking de un nivel</th></tr>
+    <tr><td colspan="2"><b>DESCRIPCIÓN:</b> Desde el menú, el jugador abre el ranking y elige el nivel. Ve el mejor tiempo de cada jugador ganando a la música, con su propia fila marcada «(tú)». A igual tiempo va delante quien lo consiguió antes.</td></tr>
+    <tr><td><b>PRECONDICIONES:</b><br>Sesión iniciada; conexión con el servidor.</td><td><b>POSTCONDICIONES:</b><br>Ninguna (solo consulta).</td></tr>
+    <tr><td><b>DATOS ENTRADA:</b><br>Nivel elegido (run0, run1).</td><td><b>DATOS SALIDA:</b><br>Posición, jugador, mejor tiempo y fecha.</td></tr>
+    <tr><td><b>TABLAS:</b><br>PARTIDAS, USUARIOS y NIVELES (MySQL).</td><td><b>CLASES:</b><br>LevelsController, LateApiClient, OnlineMenu.</td></tr>
+    <tr><td colspan="2"><b>INTERFACES:</b> pantalla /L A T E/ranking.</td></tr>
+  </table>
+  <p class="cap">{{TAB:Caso de uso CU-05 Consultar el ranking de un nivel}}</p>
+</section>
+
+<section class="page">
+  <h2 class="toc">Diseños</h2>
+  <h3 class="toc">Diagrama de clases</h3>
+  <p>Se muestran las clases principales de cada parte. Flechas continuas: uso o asociación. Discontinuas con triángulo: implementación de una interfaz.</p>
+  <figure>{{SVG:class_gen}}<figcaption>{{FIG:Diagrama de clases del generador procedural}}</figcaption></figure>
+  <figure>{{SVG:class_game}}<figcaption>{{FIG:Diagrama de clases del juego y los datos locales}}</figcaption></figure>
+</section>
+<section class="page">
+  <figure>{{SVG:class_online}}<figcaption>{{FIG:Diagrama de clases de la parte online (cliente y servidor)}}</figcaption></figure>
+
+  <h3 class="toc">Diagrama E/R</h3>
+  <p>Un usuario juega muchas partidas y cada partida pertenece a un nivel. El progreso de la cuenta no es una entidad: se calcula a partir de sus partidas ganadas, de modo que nunca puede contradecirlas.</p>
+  <figure>{{SVG:er}}<figcaption>{{FIG:Diagrama entidad-relación}}</figcaption></figure>
+</section>
+
+<section class="page">
+  <h3 class="toc">Diagrama de la base de datos</h3>
+  <p>En el servidor, MySQL guarda usuarios, niveles y partidas. En el dispositivo, SQLite guarda el progreso, las partidas pendientes de enviar y los ajustes (idioma, sesión y de qué cuenta es el progreso).</p>
+  <figure>{{SVG:db}}<figcaption>{{FIG:Diagrama de la base de datos (MySQL y SQLite)}}</figcaption></figure>
+  <p>La clave única (usuario_id, nivel_id, fecha) de PARTIDAS impide guardar dos veces una partida reenviada; la fecha se guarda con milisegundos para distinguir partidas seguidas.</p>
+
+  <h3 class="toc">API REST</h3>
+  <table>
+    <thead><tr><th>Método</th><th>Ruta</th><th>Cuenta</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td>POST</td><td>/api/auth/register</td><td>No</td><td>Crea la cuenta y devuelve el token</td></tr>
+      <tr><td>POST</td><td>/api/auth/login</td><td>No</td><td>Entra con nombre o email y devuelve el token</td></tr>
+      <tr><td>POST</td><td>/api/runs</td><td>Sí</td><td>Envía de 1 a 100 partidas; responde aceptadas, ya guardadas y rechazadas</td></tr>
+      <tr><td>GET</td><td>/api/progress</td><td>Sí</td><td>Nivel desbloqueado y mejores tiempos de la cuenta</td></tr>
+      <tr><td>GET</td><td>/api/levels</td><td>No</td><td>Niveles del juego</td></tr>
+      <tr><td>GET</td><td>/api/levels/{orden}/ranking</td><td>No</td><td>Mejor tiempo de cada jugador ganando a la música</td></tr>
+      <tr><td>GET</td><td>/health</td><td>No</td><td>Comprueba que la API y la base de datos responden</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Endpoints de la API REST}}</p>
+</section>
+
+<section class="page">
+  <h3 class="toc">Diagrama de flujo de navegación</h3>
+  <p>La pantalla de cuenta va antes que la portada: sin sesión no se entra. Con una sesión guardada el juego abre directamente en la portada, y cerrar sesión devuelve a la pantalla de cuenta.</p>
+  <figure>{{SVG:nav}}<figcaption>{{FIG:Diagrama de flujo de navegación}}</figcaption></figure>
+
+  <h3 class="toc">Diagrama de red</h3>
+  <p>En desarrollo, la API y MySQL corren en Docker en el PC. MySQL solo es accesible desde la red interna de Docker; la API se publica en el puerto 5080. Para probar desde un móvil real por internet se usa un túnel HTTPS de Cloudflare; en producción la misma composición se desplegaría en un VPS con dominio y HTTPS.</p>
+  <figure>{{SVG:net}}<figcaption>{{FIG:Diagrama de red}}</figcaption></figure>
+</section>
+
+<section class="page">
+  <h3 class="toc">Interfaces</h3>
+  <p>Capturas de las pantallas reales del juego a la resolución de un móvil Android (1080 × 2160). La interfaz online sigue la estética de terminal del menú: fuente monoespaciada, texto verde y rutas del tipo /L A T E/cuenta.</p>
+  <div class="phones">
+    <figure class="phone">{{IMG:01_cuenta_entrar}}<figcaption>Cuenta obligatoria</figcaption></figure>
+    <figure class="phone">{{IMG:02_cuenta_registro}}<figcaption>Crear cuenta</figcaption></figure>
+    <figure class="phone">{{IMG:03_portada}}<figcaption>Portada</figcaption></figure>
+    <figure class="phone">{{IMG:04_menu_es}}<figcaption>Menú (español)</figcaption></figure>
+  </div>
+  <p class="cap fig">{{FIG:Pantallas de cuenta, portada y menú en un móvil Android}}</p>
+  <div class="phones">
+    <figure class="phone">{{IMG:05_menu_en}}<figcaption>Menú (inglés)</figcaption></figure>
+    <figure class="phone">{{IMG:06_ranking}}<figcaption>Ranking de Run0</figcaption></figure>
+    <figure class="phone">{{IMG:07_cuenta_dentro}}<figcaption>Cuenta con sesión</figcaption></figure>
+    <figure class="phone">{{IMG:08_partida}}<figcaption>Partida en Run0</figcaption></figure>
+  </div>
+  <p class="cap fig">{{FIG:Pantallas de menú en inglés, ranking, cuenta y partida}}</p>
+</section>
+<section class="page">
+  <div class="phones two">
+    <figure class="phone">{{IMG:09_final_ok}}<figcaption>Llegada a tiempo</figcaption></figure>
+    <figure class="phone">{{IMG:10_final_ko}}<figcaption>La música terminó antes</figcaption></figure>
+  </div>
+  <p class="cap fig">{{FIG:Pantallas finales de la partida}}</p>
+  <p>El juego se compila también para Windows (build de 157 MB que arranca en ventana, con las mismas pantallas). En el ranking de la ilustración aparecen la cuenta del autor y una cuenta de prueba. Las capturas de Run1 y de la llave y la puerta están en los casos de uso CU-02 y CU-03.</p>
+</section>
+
+<!-- ===================== TECNOLOGÍA ===================== -->
+<section class="page">
+  <h1 class="toc">Tecnología</h1>
+  <p>Las tecnologías y herramientas utilizadas, con su descripción y su uso en el proyecto.</p>
+  {{TECH}}
+</section>
+
+<!-- ===================== METODOLOGÍA ===================== -->
+<section class="page">
+  <h1 class="toc">Metodología</h1>
+  <h2 class="toc">Metodología usada</h2>
+  <p>Se ha seguido un <strong>desarrollo incremental por fases</strong>, una por bloque de requisitos del RFTP. Cada fase termina con algo que funciona y se puede probar: primero en el editor, después en un móvil Android real, y con sus propias pruebas automáticas. Al cerrar cada fase se publica en GitHub con un commit que nombra la fase y los requisitos que cubre.</p>
+  <p>La elección se justifica por el tipo de proyecto: un videojuego necesita probarse jugando desde muy pronto, y un proyecto individual con fecha de entrega se beneficia de tener siempre una versión entregable. El orden de las fases va del núcleo del juego (generador, jugabilidad y rendimiento) hacia la parte online, de modo que cada fase se apoya en la anterior; por ejemplo, el RunResult que el juego ya generaba en la fase 3 es lo que se guarda en SQLite en la fase 7 y se envía al servidor en la fase 9.</p>
+
+  <h2 class="toc">Planificación inicial y final</h2>
+  <p>La planificación inicial estimó 213 horas en diez fases. La tabla compara la estimación con el tiempo real dedicado a cada fase y su desviación.</p>
+  <table class="num num2">
+    <thead><tr><th>Fase</th><th>Requisitos</th><th>Estimación (h)</th><th>Real (h)</th><th>Desviación (h)</th></tr></thead>
+    <tbody>
+      <tr><td>1. Análisis, anteproyecto y planificación</td><td>—</td><td>6</td><td>5</td><td>−1</td></tr>
+      <tr><td>2. Generador procedural de niveles</td><td>R01</td><td>28</td><td>30</td><td>+2</td></tr>
+      <tr><td>3. Jugabilidad, niveles e interfaz</td><td>R02</td><td>32</td><td>30</td><td>−2</td></tr>
+      <tr><td>4. Rendimiento en móvil (60 FPS)</td><td>R03F01</td><td>6</td><td>5</td><td>−1</td></tr>
+      <tr><td>5. Refactorización, Git y documentación</td><td>—</td><td>6</td><td>5</td><td>−1</td></tr>
+      <tr><td>6. Herramientas de optimización y pruebas</td><td>R03F02, R08</td><td>15</td><td class="pend">{{H6}}</td><td class="pend">{{D6}}</td></tr>
+      <tr><td>7. Datos locales (SQLite)</td><td>R04</td><td>20</td><td class="pend">{{H7}}</td><td class="pend">{{D7}}</td></tr>
+      <tr><td>8. Servidor: API, MySQL y Docker</td><td>R05, R06</td><td>40</td><td class="pend">{{H8}}</td><td class="pend">{{D8}}</td></tr>
+      <tr><td>9. Login, ranking e idiomas</td><td>R05, R06, R07</td><td>30</td><td class="pend">{{H9}}</td><td class="pend">{{D9}}</td></tr>
+      <tr><td>10. Pruebas, CI, builds y memoria final</td><td>R08</td><td>30</td><td class="pend">{{H10}}</td><td class="pend">{{D10}}</td></tr>
+      <tr class="total"><td>Total</td><td></td><td>213</td><td class="pend">{{HT}}</td><td class="pend">{{DT}}</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Planificación inicial y final por fases, en horas}}</p>
+  <p><strong>Análisis de las desviaciones.</strong> Las fases 1 a 5 se cerraron con 3 horas menos de lo previsto (75 h frente a 78 h). El generador se desvió +2 h por la reproducibilidad de la semilla entre sesiones, que obligó a rehacer el cálculo de la semilla de cada módulo; la jugabilidad y el rendimiento compensaron esa desviación. {{DEVIATION}}</p>
+</section>
+
+<section class="page">
+  <h2 class="toc">Evolución respecto a la entrega anterior</h2>
+  <p>La entrega del 9 de octubre de 2026 cerraba el núcleo del juego. Desde entonces se han completado la optimización de mapas, los datos locales, el servidor y toda la parte online.</p>
+  <table class="num num2">
+    <thead><tr><th>Indicador</th><th>Detalle</th><th>9 oct 2026</th><th>Esta entrega</th></tr></thead>
+    <tbody>
+      <tr><td>Requisitos terminados</td><td>R01 a R08</td><td>3 de 8</td><td>7 de 8</td></tr>
+      <tr><td>Fases terminadas</td><td>De las 10 del plan</td><td>5</td><td>9 (la 10, en curso)</td></tr>
+      <tr><td>Horas dedicadas</td><td>Sobre 213 estimadas</td><td>75 (36 %)</td><td>166 (78 %)</td></tr>
+      <tr><td>Casos de uso implementados</td><td>CU-01 a CU-05</td><td>3</td><td>5</td></tr>
+      <tr><td>Pruebas automáticas</td><td>Juego y API</td><td>0</td><td>96</td></tr>
+      <tr><td>Partes de la arquitectura</td><td>Juego, SQLite, API, MySQL, Docker</td><td>1 de 5</td><td>5 de 5</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Evolución respecto a la entrega anterior}}</p>
+
+  <h2 class="toc">Decisiones tomadas y cambios respecto a la planificación</h2>
+  <p>Durante esta etapa se tomaron las siguientes decisiones. Ninguna cambia el alcance del proyecto salvo la cuenta obligatoria, que endurece el requisito R05.</p>
+  <table class="dec">
+    <thead><tr><th>Decisión</th><th>Motivo</th><th>Efecto en el plan</th></tr></thead>
+    <tbody>
+      <tr><td>Cuenta obligatoria para jugar</td><td>El progreso debe pertenecer al jugador y no al dispositivo, y el ranking solo es fiable si cada partida tiene dueño.</td><td>R05 pasa de «solo suben resultados los registrados» a «solo se juega con una cuenta»; se añade R05F02 (progreso de la cuenta en cualquier dispositivo).</td></tr>
+      <tr><td>El progreso del servidor se calcula a partir de las partidas</td><td>Guardarlo aparte duplicaría datos que podrían contradecirse.</td><td>No hace falta una tabla de progreso en MySQL; el E/R planificado se mantiene.</td></tr>
+      <tr><td>.NET 10 en lugar de .NET 8</td><td>.NET 8 dejó de tener soporte el 10 de noviembre de 2026; .NET 10 es la versión LTS actual.</td><td>Ninguno funcional; se actualiza la tabla de tecnologías.</td></tr>
+      <tr><td>Proveedor oficial MySql.EntityFrameworkCore en lugar de Pomelo</td><td>Pomelo todavía no es compatible con EF Core 10.</td><td>Ninguno funcional.</td></tr>
+      <tr><td>Tabla AJUSTES en SQLite</td><td>Guardar el idioma, la sesión y de qué cuenta es el progreso del dispositivo.</td><td>La base de datos local pasa de 2 a 3 tablas.</td></tr>
+      <tr><td>Clave única (usuario, nivel, fecha) en PARTIDAS</td><td>Con conexión intermitente el juego puede reenviar una partida; no debe contarse dos veces.</td><td>Los reenvíos son seguros; el envío de pendientes no necesita confirmaciones extra.</td></tr>
+      <tr><td>Pruebas de la API contra un MySQL real (Testcontainers)</td><td>Una base de datos simulada no detecta fallos de las consultas reales.</td><td>Las pruebas de la API necesitan Docker para ejecutarse.</td></tr>
+      <tr><td>Interfaz online construida desde código</td><td>Las escenas tienen mucho trabajo manual que no conviene tocar.</td><td>La escena Main solo recibe los componentes de traducción; el resto se crea al arrancar.</td></tr>
+      <tr><td>El optimizador crea una copia <code>_Opt</code> del nivel</td><td>Conservar intacto el nivel ajustado a mano.</td><td>Las escenas siguen usando los niveles originales hasta comprobar la versión optimizada.</td></tr>
+      <tr><td>La API se publica en el puerto 5080</td><td>El 8080 lo ocupaba otro servidor web del equipo de desarrollo.</td><td>Ninguno funcional.</td></tr>
+      <tr><td>Integración continua aplazada a la entrega final</td><td>Priorizar las funcionalidades; la CI del juego necesita la licencia de Unity en GitHub y consume cuota de Git LFS.</td><td>R08F02 queda pendiente (unas 8 horas de la fase 10).</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Decisiones tomadas y cambios respecto a la planificación}}</p>
+</section>
+
+<section class="page">
+  <h2 class="toc">Diagrama de Gantt</h2>
+  <p>El diagrama sitúa cada fase en el tiempo según las fechas de sus commits en Git, de modo que se puede contrastar con el historial del repositorio, con el RFTP y con los casos de uso.</p>
+  <figure>{{SVG:gantt}}<figcaption>{{FIG:Diagrama de Gantt contrastado con los commits de Git}}</figcaption></figure>
+  <table>
+    <thead><tr><th>Fecha</th><th>Commit</th><th>Contenido</th></tr></thead>
+    <tbody>{{GITLOG}}</tbody>
+  </table>
+  <p class="cap">{{TAB:Historial de commits en Git}}</p>
+</section>
+
+<section class="page">
+  <h2 class="toc">Presupuesto</h2>
+  <p>Coste calculado a 20 €/h, tarifa de un perfil de desarrollador junior, con la estimación de horas repartida por requisito. Todas las librerías utilizadas son gratuitas y de código abierto.</p>
+  <table class="num">
+    <thead><tr><th>Requisito</th><th>Horas</th><th>Coste</th></tr></thead>
+    <tbody>
+      <tr><td>Análisis, anteproyecto y planificación</td><td>6</td><td>120 €</td></tr>
+      <tr><td>R01 · Creación rápida de niveles (generador y horneado)</td><td>28</td><td>560 €</td></tr>
+      <tr><td>R02 · Carrera contra la música (jugabilidad, niveles, llave y puerta)</td><td>32</td><td>640 €</td></tr>
+      <tr><td>R03 · Fluidez en móvil (60 FPS y optimizador de mapas)</td><td>16</td><td>320 €</td></tr>
+      <tr><td>R04 · Progreso sin conexión (SQLite)</td><td>20</td><td>400 €</td></tr>
+      <tr><td>R05 · Cuentas (registro, login, JWT y progreso de la cuenta)</td><td>27</td><td>540 €</td></tr>
+      <tr><td>R06 · Ranking y envío de partidas</td><td>37</td><td>740 €</td></tr>
+      <tr><td>R07 · Español e inglés</td><td>6</td><td>120 €</td></tr>
+      <tr><td>R08 · Pruebas automáticas e integración continua</td><td>20</td><td>400 €</td></tr>
+      <tr><td>Documentación, Git, builds y memoria</td><td>21</td><td>420 €</td></tr>
+      <tr class="total"><td>Total desarrollo</td><td>213</td><td>4.260 €</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Presupuesto de desarrollo por requisito}}</p>
+  <table class="num num2">
+    <thead><tr><th>Concepto</th><th>Detalle</th><th>Importe</th></tr></thead>
+    <tbody>
+      <tr><td>Desarrollo</td><td>213 h × 20 €/h (tabla anterior)</td><td>4.260 €</td></tr>
+      <tr><td>Unity Personal</td><td>Licencia gratuita</td><td>0 €</td></tr>
+      <tr><td>GitHub</td><td>Repositorio y Git LFS (cuota gratuita)</td><td>0 €</td></tr>
+      <tr><td>Librerías</td><td>SQLite-net, Newtonsoft.Json, ASP.NET Core, EF Core, xUnit, Testcontainers</td><td>0 €</td></tr>
+      <tr><td>Google Play Console</td><td>Cuota única de registro (25 USD)</td><td>≈ 23 €</td></tr>
+      <tr><td>Servidor (VPS)</td><td>API y MySQL en Docker, ~5 €/mes durante un año</td><td>60 €</td></tr>
+      <tr><td>Música</td><td><em>Progressive Trance Vol.1</em> (Dr.Hoffman Music), licencia Single Entity</td><td>18,39 € + IVA</td></tr>
+      <tr><td>Otros recursos de la Asset Store</td><td>Ojo, llave y skyboxes</td><td>Según licencia</td></tr>
+      <tr class="total"><td>Total estimado</td><td></td><td>≈ 4.361 €</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Presupuesto total del proyecto}}</p>
+
+  <h2 class="toc">README y Git</h2>
+  <p style="break-inside: avoid">El código está en GitHub (<code>github.com/AntonioBernal1991/Late</code>), en la rama <code>main</code>, con un commit por fase cuyo mensaje nombra la fase y los requisitos RFTP que cubre. Los recursos binarios grandes (música, texturas, modelos y niveles horneados) se guardan con Git LFS. El README principal explica el proyecto, los requisitos para abrirlo (Unity 2022.3.38f1, Git LFS y Docker), la estructura de carpetas, las fases y los recursos de terceros con su licencia; cada carpeta (<code>server/</code>, <code>docker/</code>, <code>shared/</code>) tiene su propio README con cómo ejecutarla y probarla.</p>
+</section>
+
+<!-- ===================== GUÍA DE REVISIÓN ===================== -->
+<section class="page">
+  <h1 class="toc">Cómo revisar el proyecto</h1>
+  <p>Esta guía permite comprobar las funcionalidades descritas en la memoria. El código está en <code>github.com/AntonioBernal1991/Late</code>; con la entrega se incluyen además el juego compilado para Windows y Android.</p>
+
+  <h2 class="toc">Requisitos</h2>
+  <ul>
+    <li><strong>Git y Git LFS.</strong> Tras clonar: <code>git lfs install</code> y <code>git lfs pull</code> (música, texturas y niveles).</li>
+    <li><strong>Unity 2022.3.38f1</strong> con el módulo de Android, para abrir el proyecto <code>LateGame/</code>.</li>
+    <li><strong>Docker Desktop</strong>, para el servidor y las pruebas de la API.</li>
+  </ul>
+
+  <h2 class="toc">1. Arrancar el servidor</h2>
+  <ol>
+    <li>En la carpeta <code>docker/</code>, copiar <code>.env.example</code> como <code>.env</code> y rellenar las dos contraseñas de MySQL y <code>JWT_KEY</code> (al menos 32 caracteres).</li>
+    <li>Ejecutar <code>docker compose up -d --build</code>. Las tablas se crean solas al arrancar.</li>
+    <li>Comprobar que responde: <code>http://localhost:5080/health</code> devuelve <code>{"status":"ok"}</code>. En <code>http://localhost:5080/swagger</code> se pueden probar los endpoints desde el navegador.</li>
+  </ol>
+
+  <h2 class="toc">2. Jugar</h2>
+  <ul>
+    <li><strong>Windows (lo más rápido):</strong> ejecutar <code>Late.exe</code> con el servidor en marcha en el mismo equipo. Crear una cuenta, tocar para entrar, jugar Run0 y abrir el ranking.</li>
+    <li><strong>Editor de Unity:</strong> abrir <code>LateGame/</code> desde Unity Hub, abrir la escena <code>Assets/Late/Scenes/Main</code> y pulsar Play.</li>
+    <li><strong>Android:</strong> el móvil no puede usar <code>localhost</code>. Hay que poner la dirección del equipo con el servidor en <code>Assets/Late/Resources/LateOnlineSettings</code> (por ejemplo <code>http://192.168.1.20:5080</code>) y generar el APK con <em>Late › Builds › Android (desarrollo)</em>, que permite HTTP. El APK incluido en la entrega apunta a <code>localhost</code> y sirve para ver el juego en el móvil solo si se cambia esa dirección.</li>
+  </ul>
+  <p>Sin servidor el juego muestra «sin conexión con el servidor» en la pantalla de cuenta: es el comportamiento esperado, porque la cuenta es obligatoria.</p>
+
+  <h2 class="toc">3. Ejecutar las pruebas</h2>
+  <table>
+    <thead><tr><th>Pruebas</th><th>Cómo</th><th>Resultado esperado</th></tr></thead>
+    <tbody>
+      <tr><td>Juego (62)</td><td>En Unity: <em>Window › General › Test Runner › EditMode › Run All</em></td><td>62 en verde. Las 2 de LiveApiTests se omiten si el servidor no está en marcha.</td></tr>
+      <tr><td>API (34)</td><td>Con Docker en marcha: <code>cd server</code> y <code>dotnet test</code> (.NET 10 SDK), o el comando con contenedor de <code>server/README.md</code>, que no necesita instalar .NET</td><td>34 en verde, contra un MySQL temporal que se crea y se borra solo.</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Cómo ejecutar las pruebas automáticas}}</p>
+
+  <h2 class="toc">4. Herramientas del editor</h2>
+  <table>
+    <thead><tr><th>Menú</th><th>Qué permite comprobar</th></tr></thead>
+    <tbody>
+      <tr><td>Late › Generador › Hornear</td><td>Generar un laberinto en la escena GeneratorSandbox (Play) y guardarlo como prefab (CU-01).</td></tr>
+      <tr><td>Late › Generador › Optimizar</td><td>Crear la versión optimizada de Run0 o Run1 y ver el informe de objetos y triángulos (R03F02).</td></tr>
+      <tr><td>Late › Datos locales</td><td>Abrir la carpeta de la base de datos SQLite o borrar el progreso local (R04).</td></tr>
+      <tr><td>Late › Idiomas</td><td>Traducir los textos de la escena abierta (R07).</td></tr>
+      <tr><td>Late › Builds</td><td>Generar las builds de Android y Windows.</td></tr>
+    </tbody>
+  </table>
+  <p class="cap">{{TAB:Herramientas del editor para la revisión}}</p>
+</section>
+
+<!-- ===================== TRABAJOS FUTUROS ===================== -->
+<section class="page">
+  <h1 class="toc">Trabajos futuros</h1>
+  <ul>
+    <li><strong>Publicación.</strong> Desplegar la API en un VPS con dominio y HTTPS (la composición de Docker ya está preparada) y publicar el juego en Google Play.</li>
+    <li><strong>Recuperar la contraseña por email.</strong> Hoy una contraseña olvidada no se puede recuperar, porque solo se guarda su hash; habría que enviar un enlace de cambio al email de la cuenta.</li>
+    <li><strong>Más contenido.</strong> Nuevos tipos de nivel con otros MapSettings y RunTuning, un tercer nivel tras Run1 y nuevas mecánicas sobre la llave y la puerta.</li>
+    <li><strong>Usar los niveles optimizados.</strong> Sustituir en las escenas los niveles por su versión optimizada y medir su efecto en móviles de gama baja.</li>
+    <li><strong>Integración continua (entrega final).</strong> Workflows de GitHub Actions que compilen y prueben el servidor y el juego (GameCI) en cada cambio y generen las builds de Android y Windows.</li>
+    <li><strong>Más idiomas y ajustes.</strong> La tabla de textos y la tabla AJUSTES permiten añadir idiomas, volumen o sensibilidad del control sin cambiar la estructura.</li>
+  </ul>
+</section>
+
+<!-- ===================== CONCLUSIONES ===================== -->
+<section class="page">
+  <h1 class="toc">Conclusiones</h1>
+  <p>En esta entrega parcial el proyecto cumple siete de los ocho requisitos del RFTP; del octavo (R08) están hechas las pruebas automáticas y falta la integración continua, prevista para la entrega final. El generador procedural permite prototipar un nivel en segundos y la herramienta de optimización lo deja listo para el móvil sin cambiar cómo se ve ni cómo se juega. La idea central funciona: la música es el cronómetro y el juego se mantiene a 60 FPS en un Android real.</p>
+  <p>La parte online convierte un juego local en uno competitivo sin perder lo que lo hacía jugable en cualquier sitio. Con la cuenta obligatoria, el progreso sigue al jugador entre dispositivos y el ranking es común para todos; y como cada partida se guarda primero en SQLite y el servidor descarta los reenvíos, el juego tolera perder la conexión sin perder datos.</p>
+  <p>Desde el punto de vista profesional, el proyecto ha supuesto trabajar con una arquitectura completa de varias capas, con datos en el dispositivo y en el servidor, seguridad real (contraseñas con hash, tokens y límite de intentos), despliegue con Docker y una disciplina de pruebas: 96 pruebas automáticas, algunas contra la base de datos real. Varios fallos se encontraron gracias a esas pruebas antes de llegar al jugador, como textos traducidos que no cabían en pantalla o un permiso de Internet que faltaba en Android.</p>
+</section>
+
+<!-- ===================== REFERENCIAS ===================== -->
+<section class="page">
+  <h1 class="toc">Referencias</h1>
+  <p class="small">Según las normas APA. Cada referencia indica el apartado del proyecto en el que se ha aplicado.</p>
+  <div class="refs">
+    <p class="use">Aplicado en el juego, el generador, el rendimiento (<em>static batching</em>, ScriptableObjects) y las builds.</p>
+    <p>Unity Technologies. (s. f.). <em>Unity Manual 2022.3</em>. Recuperado de https://docs.unity3d.com/2022.3/Documentation/Manual/</p>
+    <p class="use">Aplicado en las pruebas automáticas del juego.</p>
+    <p>Unity Technologies. (s. f.). <em>Unity Test Framework</em>. Recuperado de https://docs.unity3d.com/Packages/com.unity.test-framework@1.1/manual/index.html</p>
+    <p class="use">Aplicado en la API REST, la autenticación con JWT y el límite de intentos.</p>
+    <p>Microsoft. (s. f.). <em>ASP.NET Core documentation</em>. Recuperado de https://learn.microsoft.com/aspnet/core/</p>
+    <p class="use">Aplicado en el acceso a MySQL, el modelo de datos y las migraciones.</p>
+    <p>Microsoft. (s. f.). <em>Entity Framework Core</em>. Recuperado de https://learn.microsoft.com/ef/core/</p>
+    <p class="use">Aplicado en el proveedor de MySQL para EF Core.</p>
+    <p>Oracle Corporation. (s. f.). <em>MySQL Connector/NET: Entity Framework Core support</em>. Recuperado de https://dev.mysql.com/doc/connector-net/en/connector-net-entityframework-core.html</p>
+    <p class="use">Aplicado en la base de datos local del juego.</p>
+    <p>SQLite Consortium. (s. f.). <em>SQLite Documentation</em>. Recuperado de https://www.sqlite.org/docs.html</p>
+    <p>Reis, G. B. (s. f.). <em>SQLite-net for Unity</em> [Software]. Recuperado de https://github.com/gilzoide/unity-sqlite-net</p>
+    <p class="use">Aplicado en las pruebas de integración de la API contra MySQL.</p>
+    <p>Testcontainers. (s. f.). <em>Testcontainers for .NET</em>. Recuperado de https://dotnet.testcontainers.org/</p>
+    <p class="use">Aplicado en el despliegue de la API y la base de datos.</p>
+    <p>Docker Inc. (s. f.). <em>Docker Compose documentation</em>. Recuperado de https://docs.docker.com/compose/</p>
+    <p class="use">Aplicado en las pruebas en un móvil real por internet.</p>
+    <p>Cloudflare. (s. f.). <em>Quick Tunnels</em>. Recuperado de https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/do-more-with-tunnels/trycloudflare/</p>
+    <p class="use">Aplicado en el control de versiones de los recursos binarios.</p>
+    <p>GitHub. (s. f.). <em>Git Large File Storage</em>. Recuperado de https://git-lfs.com/</p>
+  </div>
+</section>

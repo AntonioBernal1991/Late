@@ -1,0 +1,5 @@
+{
+  "horas": { "6": 14, "7": 12, "8": 25, "9": 18, "10": 22 },
+  "en_curso": ["10"],
+  "desviaciones": "La parte de datos y online se cerró bastante por debajo de lo previsto: SQLite 8 horas menos, el servidor 15 menos y el login, ranking e idiomas 12 menos. La estimación inicial era prudente porque eran tecnologías nuevas en el proyecto, pero el diseño de las primeras fases las simplificó: la interfaz IProgressStore y el RunResult de la fase 3 permitieron añadir SQLite sin tocar el juego, la librería SQLite-net y ASP.NET Core resolvieron gran parte del acceso a datos y la autenticación, y los contratos compartidos (shared/) evitaron escribir dos veces los mismos objetos en el juego y en el servidor. La fase 10 sigue en curso: lleva 22 de sus 30 horas y quedan unas 8 para la integración continua de la entrega final. Hasta esta entrega el proyecto suma 166 horas de las 213 estimadas."
+}
