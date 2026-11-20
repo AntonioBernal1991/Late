@@ -60,3 +60,6 @@ Thumbs.db
 # La plantilla sin secretos sí se sube
 !.env.example
 appsettings.Development.json
+
+# Caché de Python (scripts de la memoria)
+__pycache__/
