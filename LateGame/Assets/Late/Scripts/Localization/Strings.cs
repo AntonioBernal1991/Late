@@ -15,8 +15,9 @@ namespace Late.Localization
             ["menu.tree"] = (
                 "/L A T E\n├── niveles\r\n│   ├── \n│   ├── \n│   ├── \n│   ├── \n│   └── \n├── ajustes\r\n│   ├── audio\r\n│   └── vídeo\r\n└── observador.log\r\n",
                 "/L A T E\n├── run\r\n│   ├── \n│   ├── \n│   ├── \n│   ├── \n│   └── \n├── settings\r\n│   ├── audio\r\n│   └── video\r\n└── observer.log\r\n"),
-            ["tap.getin"] = ("toca para entrar -->", "tap to get in -->"),
-            ["tap.continue"] = ("toca para continuar -->", "tap to continue -->"),
+            // Los botones de la escena tienen el ancho del texto inglés: el español no debe ser más largo.
+            ["tap.getin"] = ("toca y entra -->", "tap to get in -->"),
+            ["tap.continue"] = ("toca y sigue -->", "tap to continue -->"),
             ["end.completed"] = ("   Proceso completado", "   Process Completed"),
             ["end.terminated"] = ("   Proceso terminado", "   Process Terminated"),
             ["end.good"] = ("Suficiente", "Good Enough"),

@@ -47,6 +47,15 @@ namespace Late.Tests
             }
         }
 
+        [TestCase("tap.getin")]
+        [TestCase("tap.continue")]
+        public void BotonesDeLaEscena_ElEspañolNoEsMasLargoQueElIngles(string key)
+        {
+            // Los botones de la escena Main tienen el ancho del texto inglés original: si el
+            // español es más largo, se sale de la pantalla (pasó con «toca para entrar -->»).
+            Assert.LessOrEqual(Strings.Get(key, Language.Spanish).Length, Strings.Get(key, Language.English).Length);
+        }
+
         [Test]
         public void CambiarDeIdioma_CambiaLosTextosYSeGuarda()
         {
